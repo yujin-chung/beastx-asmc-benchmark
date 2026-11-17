@@ -102,23 +102,42 @@ chk("20,000,000-state chains: 15 alignments, consensus error identical for 12 an
     and (r3(_f("nrf_20M").mean()), r3(_f("nrf_N2000").mean())) == (0.028, 0.026))
 chk("20,000,000-state chains: P(true) means 0.186 and 0.189", (r3(_f("p_20M").mean()), r3(_f("p_N2000").mean())) == (0.186, 0.189))
 
-# ---- M1809 ----------------------------------------------------------------------------------------------------
-_lad = json.load(open(C.table("emp_converge_EMP_M1809.json")))["rungs"]
-_e = json.load(open(C.table("emp_converge_EMPA5_M1809.json")))["rungs"]["1000"]
-chk("M1809, alpha = 0.99999, N = 1,000, between programs: consensus RF 4 (0.036), MCC RF 6, r = 0.94, |support difference| 0.063, 48 and 46 splits >= 0.95",
-    (_e["between"]["cons_rf"], round(_e["between"]["cons_nrf"], 3), _e["between"]["mcc_rf"], round(_e["between"]["pearson"], 2),
-     round(_e["between"]["dsupport"], 3), _e["between"]["resolved95_beastx"], _e["between"]["resolved95_asmc"]) == (4, 0.036, 6, 0.94, 0.063, 48, 46))
-chk("M1809 between seeds: consensus RF 2.4 for both programs; support difference 0.044 and 0.039; log Z range 23.5",
-    (_e["asmc"]["cons_rf_mean"], _e["beastx"]["cons_rf_mean"], round(_e["asmc"]["dsupport_mean"], 3), round(_e["beastx"]["dsupport_mean"], 3),
-     round(_e["asmc"]["logZ_spread"], 1)) == (2.4, 2.4, 0.044, 0.039, 23.5))
-chk("M1809, alpha = 0.99999: median CPU 333,456 s per run against 290 for BEAST X",
-    round(float(np.median(_e["asmc"]["cpu_s"]))) == 333456 and round(float(np.median(_e["beastx"]["cpu_s"]))) == 290)
+# ---- M1809 (Results; Online Resource 1, Results S1, Fig. S4 and Table S4) ------------------------------------
+_lad = json.load(open(C.table("emp_converge_EMP_M1809.json")))["rungs"]                 # alpha = 0.99, five output sizes
+_e = json.load(open(C.table("emp_converge_EMPA5_M1809.json")))["rungs"]["1000"]         # alpha = 0.99999, N = 1,000
 _rs = sorted(int(k) for k in _lad)
-chk("M1809, alpha = 0.99: log Z ranges 860, 864, 719, 587, 189; consensus RF between programs 15-24",
-    [round(_lad[str(n)]["asmc"]["logZ_spread"]) for n in _rs] == [860, 864, 719, 587, 189]
-    and (min(_lad[str(n)]["between"]["cons_rf"] for n in _rs), max(_lad[str(n)]["between"]["cons_rf"] for n in _rs)) == (15, 24))
-chk("M1809, alpha = 0.99: seed-to-seed support difference above the 0.05 criterion at every rung",
-    min(_lad[str(n)]["asmc"]["dsupport_mean"] for n in _rs) > 0.05)
+_lo = [_lad[str(n)]["asmc"] for n in _rs]
+_bx = [_lad[str(n)]["beastx"] for n in _rs]
+_bt = [_lad[str(n)]["between"] for n in _rs]
+_med = lambda r: float(np.median(r["cpu_s"]))
+chk("alpha = 0.99999, N = 1,000, between programs: r = 0.94, |support difference| 0.063, consensus RF 4 (0.036), MCC RF 6, 48 and 46 of 56 splits >= 0.95",
+    (round(_e["between"]["pearson"], 2), round(_e["between"]["dsupport"], 3), _e["between"]["cons_rf"], round(_e["between"]["cons_nrf"], 3),
+     _e["between"]["mcc_rf"], _e["between"]["resolved95_beastx"], _e["between"]["resolved95_asmc"]) == (0.94, 0.063, 4, 0.036, 6, 48, 46))
+chk("median CPU per run 290 s (BEAST X) and 333,456 s (annealed SMC, about 3.9 CPU-days), a ratio of about 1,150",
+    round(_med(_e["beastx"])) == 290 and round(_med(_e["asmc"])) == 333456 and round(_med(_e["asmc"]) / 86400.0, 1) == 3.9
+    and round(_med(_e["asmc"]) / _med(_e["beastx"]) / 50.0) * 50 == 1150)
+chk("alpha = 0.99999 between seeds: consensus RF 2.4 (maximum 6), support difference 0.044; BEAST X 2.4 (maximum 4), 0.039; log Z range 23.5",
+    (_e["asmc"]["cons_rf_mean"], _e["asmc"]["cons_rf_max"], round(_e["asmc"]["dsupport_mean"], 3), _e["beastx"]["cons_rf_mean"],
+     _e["beastx"]["cons_rf_max"], round(_e["beastx"]["dsupport_mean"], 3), round(_e["asmc"]["logZ_spread"], 1)) == (2.4, 6.0, 0.044, 2.4, 4.0, 0.039, 23.5))
+# the article counts the lines of the temperature trajectory file, as in the "steps" column of alpha_rerun.csv;
+# the JSON stores that count minus one
+chk("alpha = 0.99999: 17,508-17,822 annealing steps per run",
+    (min(_e["asmc"]["annealing_steps"]) + 1, max(_e["asmc"]["annealing_steps"]) + 1) == (17508, 17822))
+chk("alpha = 0.99 between seeds: consensus RF 54.0, 41.4, 45.2, 32.0, 31.3; at N = 1,000 maximum 63 and normalized 0.482",
+    [round(r["cons_rf_mean"], 1) for r in _lo] == [54.0, 41.4, 45.2, 32.0, 31.3]
+    and (_lo[0]["cons_rf_max"], round(_lo[0]["cons_nrf_mean"], 3)) == (63.0, 0.482))
+chk("alpha = 0.99 between seeds: support difference 0.299, 0.213, 0.196, 0.181, 0.170 (3.4 times the 0.05 threshold at N = 50,000)",
+    [round(r["dsupport_mean"], 3) for r in _lo] == [0.299, 0.213, 0.196, 0.181, 0.170] and round(_lo[-1]["dsupport_mean"] / 0.05, 1) == 3.4)
+chk("alpha = 0.99: log Z range 860 at N = 1,000 and 189 at N = 50,000; median CPU 912,944 s at N = 50,000, 2.7 times the cost at alpha = 0.99999",
+    (round(_lo[0]["logZ_spread"]), round(_lo[-1]["logZ_spread"])) == (860, 189) and round(_med(_lo[-1])) == 912944
+    and round(_med(_lo[-1]) / _med(_e["asmc"]), 1) == 2.7)
+chk("BEAST X: consensus trees identical across seeds from N = 5,000; median CPU 1,125 s at N = 5,000",
+    all(r["cons_rf_mean"] == 0 for r in _bx[1:]) and _bx[0]["cons_rf_mean"] > 0 and round(_med(_bx[1])) == 1125)
+chk("alpha = 0.99 between programs: consensus RF 15-24; 17 splits >= 0.95 at N = 1,000 and 32 at N = 50,000",
+    (min(r["cons_rf"] for r in _bt), max(r["cons_rf"] for r in _bt)) == (15, 24)
+    and (_bt[0]["resolved95_asmc"], _bt[-1]["resolved95_asmc"]) == (17, 32))
+chk("alpha = 0.99 between programs: split-support correlations 0.81 to 0.89",
+    (round(min(r["pearson"] for r in _bt), 2), round(max(r["pearson"] for r in _bt), 2)) == (0.81, 0.89))
 
 print("\n%d failed" % len(FAILED))
 sys.exit(1 if FAILED else 0)

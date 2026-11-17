@@ -22,7 +22,7 @@ Two things can be reproduced from this repository:
 | `pipeline/` | The scripts that generated the data and ran and scored both programs, as they were run on the server |
 | `pipeline/tables/` | One row per run: accuracy, CPU time, wall-clock time (the input of everything in `analysis/`) |
 | `analysis/` | Scripts that turn `pipeline/tables/` into the figures, tables and numbers of the article |
-| `output/figures/` | Figs. 1–6 and S1–S3 as produced by `analysis/make_figures.py` (PDF and 600-dpi PNG) |
+| `output/figures/` | Figs. 1–5 and S1–S4 as produced by `analysis/make_figures.py` (PDF and 600-dpi PNG) |
 | `output/tables/` | Tables S1–S4 and the summary tables as produced by `analysis/` |
 
 ## Reproducing the figures and tables
@@ -32,7 +32,7 @@ Requirements: Python 3 with NumPy, SciPy and Matplotlib (`pip install -r require
 ```bash
 cd analysis
 python3 make_summaries.py        # means, SDs, paired differences  -> output/tables/
-python3 make_figures.py          # Figs. 1-6, S1-S3                -> output/figures/
+python3 make_figures.py          # Figs. 1-5, S1-S4                -> output/figures/
 python3 make_tables.py           # Tables S1-S4                    -> output/tables/
 python3 check_paper_numbers.py   # recomputes the numbers quoted in the text; prints "0 failed"
 ```
@@ -42,12 +42,12 @@ python3 check_paper_numbers.py   # recomputes the numbers quoted in the text; pr
 | Fig. 1, Fig. 2, Fig. S1 (error and posterior support against N) | `make_figures.py` | `equal_n_runs.tsv`, `alpha_rerun.csv` |
 | Fig. 3, Fig. 4 (cost; error against cost), Figs. S2–S3 | `make_figures.py` | `alpha_rerun.csv` |
 | Fig. 5 (parallel scaling) | `make_figures.py` | `scaling_runs.tsv` |
-| Fig. 6 (M1809) | `make_figures.py` | `emp_converge_EMP_M1809.json`, `emp_converge_EMPA5_M1809.json` |
+| Fig. S4 (M1809) | `make_figures.py` | `emp_converge_EMP_M1809.json`, `emp_converge_EMPA5_M1809.json` |
 | Table S1 (N = 100) | `make_tables.py` | `equal_n_runs.tsv`, `alpha_rerun.csv` |
 | Table S2 (N = 2,000) | `make_tables.py` | `equal_n_runs.tsv`, `wall_mean_sd.csv` |
 | Table S3 (four values of α) | `make_tables.py` | `alpha_pilot.csv`, `alpha_rerun.csv` |
 | Table S4 (M1809) | `make_tables.py` | `emp_converge_EMP_M1809.json`, `emp_converge_EMPA5_M1809.json` |
-| Numbers quoted in the abstract and Results | `check_paper_numbers.py`, `make_summaries.py` | all of the above and `conv_check.csv` |
+| Numbers quoted in the abstract, Results and Online Resource 1 (Results S1) | `check_paper_numbers.py`, `make_summaries.py` | all of the above and `conv_check.csv` |
 
 Tables 1 and 2 of the article (the simulation design and the practical guidance) contain no computed values.
 The figures of the article are lettered in the Inter typeface; if it is not installed, Matplotlib's default typeface

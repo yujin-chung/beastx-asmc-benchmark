@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figures 1-6 of the article and Figs. S1-S3 of Online Resource 1.
+"""Figures 1-5 of the article and Figs. S1-S4 of Online Resource 1.
 
     Figs. 1, 2, S1   error and posterior support against N: BEAST X and annealed SMC at alpha = 0.99 on 50 replicates
                      at every N; annealed SMC at alpha = 0.99999 on 50 replicates at N = 100 (filled square, with its
@@ -7,7 +7,7 @@
     Figs. 3, 4       CPU time, wall-clock time and error against cost for the three analyses on replicates 1-5
     Figs. S2, S3     error and posterior support against N for the three analyses on replicates 1-5
     Fig. 5           thread-scaling ladders (pipeline/tables/scaling_runs.tsv)
-    Fig. 6           the M1809 alignment (pipeline/tables/emp_converge_EMP_M1809.json: every rung at alpha = 0.99;
+    Fig. S4          the M1809 alignment (pipeline/tables/emp_converge_EMP_M1809.json: every rung at alpha = 0.99;
                      emp_converge_EMPA5_M1809.json: N = 1,000 at alpha = 0.99999)
 
 Points are means and bars one standard deviation.  Each figure is drawn at its printed size and written to
@@ -240,7 +240,7 @@ def fig_scaling(stem, size_cm):
     finish(fig, stem, h_pad=1.2)
 
 
-# ---- Fig. 6 (M1809) ----------------------------------------------------------------------------------------
+# ---- Fig. S4 (M1809) ---------------------------------------------------------------------------------------
 def fig_ladder(stem, size_cm):
     lad = json.load(open(C.table("emp_converge_EMP_M1809.json")))["rungs"]              # alpha = 0.99, five rungs
     hi = json.load(open(C.table("emp_converge_EMPA5_M1809.json")))["rungs"]["1000"]["asmc"]      # alpha = 0.99999
@@ -302,7 +302,7 @@ if __name__ == "__main__":
     fig_cost("fig3_cost_vs_n", (13.0, 14.84))
     fig_acc_vs_cost("fig4_accuracy_vs_cost", (13.0, 14.84))
     fig_scaling("fig5_scaling", (13.0, 14.84))
-    fig_ladder("fig6_empirical_ladder", (13.0, 10.54))
     facet_vs_n("nrf_cons", "normalized RF, majority-rule consensus", "figS1_accuracy_vs_n_consensus", (16.0, 17.5))
     facet5("nrf_mcc", "normalized RF, MCC tree", "figS2_accuracy_vs_n_reps1-5", (14.7, 16.6))
     facet5("p_true", "posterior probability\nof true topology", "figS3_ptrue_vs_n_reps1-5", (16.0, 18.0))
+    fig_ladder("figS4_empirical_ladder", (13.0, 10.54))

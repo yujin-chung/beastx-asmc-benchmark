@@ -6,7 +6,8 @@
     table_S2.csv            N = 2,000: BEAST X and annealed SMC at alpha = 0.99.  Accuracy and CPU time over the 50
                             replicates; wall-clock time over replicates 1-5 (pipeline/tables/wall_mean_sd.csv)
     table_S3.csv            annealed SMC at four values of alpha (pipeline/tables/alpha_pilot.csv)
-    table_S4a.csv, _S4b     the M1809 alignment, within and between programs (emp_converge_*.json)
+    table_S4a.csv, _S4b     the M1809 alignment: (a) agreement between seeds within each program and cost,
+                            (b) agreement between the programs (emp_converge_*.json)
 
 Tables 1 and 2 of the article (the simulation design and the practical guidance) contain no computed values.
 Cells are "mean (SD)" unless stated otherwise.
