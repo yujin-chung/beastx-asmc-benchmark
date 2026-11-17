@@ -1,0 +1,6 @@
+Program,Taxa,Tree summary,Strict-clock mean nRF,Relaxed-clock mean nRF,Difference [95% CI]
+BEAST X,20,MCC,0.040,0.056,"0.016 [-0.004, 0.037]"
+BEAST X,50,MCC,0.051,0.054,"0.003 [-0.010, 0.016]"
+BEAST X,20,Consensus,0.034,0.051,"0.018 [0.000, 0.035]"
+"SMC, α = 0.99",20,MCC,0.048,0.058,0.009
+"SMC, α = 0.99",50,MCC,0.260,0.258,-0.002

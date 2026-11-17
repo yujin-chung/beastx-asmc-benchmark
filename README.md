@@ -23,7 +23,7 @@ Two things can be reproduced from this repository:
 | `pipeline/tables/` | One row per run: accuracy, CPU time, wall-clock time (the input of everything in `analysis/`) |
 | `analysis/` | Scripts that turn `pipeline/tables/` into the figures, tables and numbers of the article |
 | `output/figures/` | Figs. 1–5 and S1–S4 as produced by `analysis/make_figures.py` (PDF and 600-dpi PNG) |
-| `output/tables/` | Tables S1–S4 and the summary tables as produced by `analysis/` |
+| `output/tables/` | Tables S1–S9 and the summary tables as produced by `analysis/` |
 
 ## Reproducing the figures and tables
 
@@ -33,7 +33,7 @@ Requirements: Python 3 with NumPy, SciPy and Matplotlib (`pip install -r require
 cd analysis
 python3 make_summaries.py        # means, SDs, paired differences  -> output/tables/
 python3 make_figures.py          # Figs. 1-5, S1-S4                -> output/figures/
-python3 make_tables.py           # Tables S1-S4                    -> output/tables/
+python3 make_tables.py           # Tables S1-S9                    -> output/tables/
 python3 check_paper_numbers.py   # recomputes the numbers quoted in the text; prints "0 failed"
 ```
 
@@ -47,6 +47,11 @@ python3 check_paper_numbers.py   # recomputes the numbers quoted in the text; pr
 | Table S2 (N = 2,000) | `make_tables.py` | `equal_n_runs.tsv`, `wall_mean_sd.csv` |
 | Table S3 (four values of α) | `make_tables.py` | `alpha_pilot.csv`, `alpha_rerun.csv` |
 | Table S4 (M1809) | `make_tables.py` | `emp_converge_EMP_M1809.json`, `emp_converge_EMPA5_M1809.json` |
+| Table S5 (paired differences) | `make_tables.py` | `equal_n_runs.tsv`, `alpha_rerun.csv` |
+| Table S6 (error and support across N) | `make_tables.py` | `equal_n_runs.tsv`, `alpha_rerun.csv` |
+| Table S7 (CPU time, wall-clock time, parallel scaling) | `make_tables.py` | `alpha_rerun.csv`, `scaling_runs.tsv` |
+| Table S8 (rate variation among lineages) | `make_tables.py` | `equal_n_runs.tsv`, `alpha_rerun.csv` |
+| Table S9 (chains of 20,000,000 states) | `make_tables.py` | `conv_check.csv` |
 | Numbers quoted in the abstract, Results and Online Resource 1 (Results S1) | `check_paper_numbers.py`, `make_summaries.py` | all of the above and `conv_check.csv` |
 
 Tables 1 and 2 of the article (the simulation design and the practical guidance) contain no computed values.
