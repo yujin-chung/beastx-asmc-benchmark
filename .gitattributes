@@ -1,0 +1,4 @@
+# keep LF line endings on every platform (shell scripts fail with CRLF)
+* text=auto eol=lf
+*.png binary
+*.pdf binary

@@ -1,0 +1,5 @@
+# for analysis/ (figures, tables, checks)
+numpy
+scipy
+matplotlib
+# for pipeline/ (the runs themselves) additionally: dendropy==4.6.4, biopython==1.83
